@@ -1,0 +1,1 @@
+Guppy images were obtained from Kottler, V.A., Fadeev, A., Weigel, D. & Dreyer, C. (2013). Pigment pattern formation in the guppy, Poecilia reticulata, involves the Kita and Csf1ra receptor tyrosine kinases. Genetics, 194, 631–646.
