@@ -1,5 +1,5 @@
 <i>Heliconius</i> images were provided by <a href="https://www.countermanlab.org/">Brian Counterman</a>.
-
+ 
 
 
 Guppy images were obtained with permission from: 
