@@ -1,3 +1,5 @@
+library(patternize)
+
 ###############################################
 # Analysis for Figure 1
 ###############################################
@@ -109,10 +111,10 @@ target <- imageListEra[['BC0057']]
 # run alignment of color patterns
 
 RGB <- c(143,138,49) # yellow
-rasterList_regRGBEra <- patRegRGB(imageListEra, target, RGB, resampleFactor = 5, colOffset= 0.11, crop = c(1000,3800,500,2800), removebg = TRUE, plot = TRUE, focal = TRUE, sigma = 5, iterations = 5)
+rasterList_regRGBEra <- patRegRGB(imageListEra, target, RGB, resampleFactor = 5, colOffset= 0.12, crop = c(1000,3800,500,2800), removebg = TRUE, plot = TRUE, focal = TRUE, sigma = 5, iterations = 5)
 
 RGB <- c(114,17,0) # red
-rasterList_regRGBHyb <- patRegRGB(imageListHyb, target, RGB, resampleFactor = 5, colOffset= 0.11, crop = c(1000,3800,500,2800), removebg = TRUE, plot = TRUE, focal = TRUE, sigma = 5, iterations = 5)
+rasterList_regRGBHyb <- patRegRGB(imageListHyb, target, RGB, resampleFactor = 5, colOffset= 0.12, crop = c(1000,3800,500,2800), removebg = TRUE, plot = TRUE, focal = TRUE, sigma = 5, iterations = 5)
 
 # sum the colorpatterns
 summedRaster_regRGBEra <- sumRaster(rasterList_regRGBEra, IDListEra, type = 'RGB')
@@ -128,7 +130,7 @@ plotHeat(summedRaster_regRGBHyb, IDListHyb, plotCartoon = TRUE, refShape = 'targ
 # subtract rasters
 subtracted <- summedRaster_regRGBEra/length(IDListEra) - summedRaster_regRGBHyb/length(IDListHyb)
 
-# plot heatmap
+# plot subtracted heatmap
 colfunc <- c("blue","lightblue","white","pink","red")
 plotHeat(subtracted, IDlist, plotCartoon = TRUE, refShape = 'target', outline = outline_BC0057, lines = lines_BC0057, landList = landmarkList, adjustCoords = TRUE, crop = c(1000,3800,500,2800), flipRaster = 'xy', imageList = imageList, cartoonID = 'BC0057', zlim=c(-1,1), colpalette= colfunc, normalized = TRUE)
 
@@ -144,9 +146,55 @@ TotalList <- c(rasterList_regRGBEra, rasterList_regRGBHyb)
 
 pcaOut <- patPCA(TotalList, popList, colList)
 comp <- prcomp(pcaOut[[1]])
-pcaOut[[2]]
-plot(comp$rotation, col=as.vector(pcaOut[[2]]$col), pch=19)
 
+pcaOut[[2]]
+plot(comp$rotation[,1:2], col=as.vector(pcaOut[[2]]$col), pch=19)
+
+
+
+# library(logisticPCA)
+# 
+# logi<-logisticPCA((pcaOut[[1]]), k=20)
+# logi$U
+# 
+# 
+# 
+# 
+# 
+# pcdata <- comp$x
+# pcdata <-logi$PCs
+# rotation <- comp$rotation
+# k <- dim(pcaOut[[1]])[1] ; p <- dim(pcaOut[[1]])[2]
+# 
+# PC1min <- min(pcdata[,2])
+# PC1max <- max(pcdata[,2])
+# 
+# pc.vecMi <- rep(0, dim(logi$U)[2])
+# pc.vecMi[2] <- PC1min 
+# 
+# pc.vecMa <- rep(0, dim(logi$U)[2])
+# pc.vecMa[2] <- PC1max 
+# 
+# 
+# xMi <- pcdata %*% pc.vecMi
+# xMa <- pcdata %*% pc.vecMa
+# 
+# x2Mi <-matrix(xMi,ncol = dim(TotalList[[1]])[1], nrow = dim(TotalList[[1]])[2])
+# x2Ma <-matrix(xMa,ncol = dim(TotalList[[1]])[1], nrow = dim(TotalList[[1]])[2])
+# 
+# mapMi <-raster::raster(x2Mi)
+# mapMi[mapMi == 0] <- NA
+# 
+# mapMa <-raster::raster(x2Ma)
+# mapMa[mapMa == 0] <- NA
+# 
+# raster::extent(mapMi) <- raster::extent(TotalList[[1]])
+# raster::extent(mapMa) <- raster::extent(TotalList[[1]])
+# 
+# raster::plot(mapMi)
+# raster::plot(mapMa)
+# 
+# raster::plot(mapMa-mapMi)
 ###
 # Calculate colored areas
 ###
@@ -168,11 +216,11 @@ plot(dHyb, xlim=c(0.05,0.25), ylim=c(0,40), main="")
 polygon(dHyb, col=rgb(1, 0, 0, 0.5), border="red")
 
 ###############################################
-# Analysis for Figure 3
+# Analysis for Figure X - Guppies
 ###############################################
 
 ###
-# patternize registration/K analysis of guppies
+# patternize registration/K analysis
 ###
 
 # Lists with samples
@@ -225,3 +273,76 @@ pcaOut <- patPCA(TotalList, popList, colList)
 comp <- prcomp(pcaOut[[1]])
 pcaOut[[2]]
 plot(comp$rotation, col=as.vector(pcaOut[[2]]$col), pch=19)
+
+
+###############################################
+# Analysis for Figure X - Wolfspiders from the Galapagos
+###############################################
+
+###
+# patternize registration/K analysis
+###
+
+# Galapagos: Santa Cruz - Top
+IDListGala <- c('IMG_2627','IMG_2645','IMG_2602','IMG_0710','IMG_2637','IMG_2591','IMG_2599','IMG_2600','IMG_2608','IMG_2630')
+
+# Galapagos: Santa Cruz - Coast
+IDListHend <-c('IMG_1739','IMG_1745','IMG_1697','IMG_1711','IMG_1733','IMG_1737','IMG_1742','IMG_1746','IMG_1755','IMG_1763')
+
+# Galapagos: San Cristobal - Top
+IDListJunc <- c('IMG_1238','IMG_1242','IMG_1244','IMG_1262','IMG_1266','IMG_1268','IMG_1271','IMG_1276','IMG_1281','IMG_1285')
+
+# Galapagos: San Cristobal - Coast
+IDListSnod <- c('IMG_1389','IMG_1373','IMG_1380','IMG_1392','IMG_1540','IMG_1393','IMG_1394','IMG_1365','IMG_1364','IMG_1341')
+
+# Galapagos: Espanola - Coast
+IDListEspa <- c('IMG_1130','IMG_1150','IMG_0957','IMG_0930','IMG_1039','IMG_1107','IMG_1115','IMG_1116','IMG_1122','IMG_1126')
+
+# make lists with images
+extension <- '.jpg'
+prepath <- 'images/Hogna/Hgalapagoensis'
+imageListGala <- makeList(IDListGala, 'image', prepath, extension)
+prepath <- 'images/Hogna/Hhendrickxi'
+imageListHend <- makeList(IDListHend, 'image', prepath, extension)
+prepath <- 'images/Hogna/Hjunco'
+imageListJunc <- makeList(IDListJunc, 'image', prepath, extension)
+prepath <- 'images/Hogna/Hsnodgrassi'
+imageListSnod <- makeList(IDListSnod, 'image', prepath, extension)
+prepath <- 'images/Hogna/Hespanola'
+imageListEspa <- makeList(IDListEspa, 'image', prepath, extension)
+
+# choose target image
+target <- imageListGala[['IMG_2600']]
+
+# run alignment of color patterns
+
+outline_IMG_2600 <- read.table('cartoon/IMG_2600_outline.txt', h= F)
+
+# color extraction using k-means
+rasterList_regGalaK <- patRegK(imageListGala, target, k = 3, resampleFactor = 10, plot = T, removebgR = 130, removebgK = 150)
+rasterList_regHendK <- patRegK(imageListHend, target, k = 3, resampleFactor = 10, plot = T, removebgR = 130, removebgK = 180)
+rasterList_regJuncK <- patRegK(imageListJunc, target, k = 3, resampleFactor = 10, plot = T, removebgR = 130, removebgK = 130)
+rasterList_regSnodK <- patRegK(imageListSnod, target, k = 3, resampleFactor = 10, plot = T, removebgR = 130, removebgK = 200)
+rasterList_regEspaK <- patRegK(imageListEspa, target, k = 3, resampleFactor = 10, plot = T, removebgR = 130, removebgK = 200)
+
+summedRaster_GalaK <- sumRaster(rasterList_regGalaK, IDListGala, type = 'k')
+summedRaster_HendK <- sumRaster(rasterList_regHendK, IDListHend, type = 'k')
+summedRaster_JuncK <- sumRaster(rasterList_regJuncK, IDListJunc, type = 'k')
+summedRaster_SnodK <- sumRaster(rasterList_regSnodK, IDListSnod, type = 'k')
+summedRaster_EspaK <- sumRaster(rasterList_regEspaK, IDListEspa, type = 'k')
+
+plotHeat(summedRaster_GalaK, IDListGal)
+plotHeat(summedRaster_HendK, IDListHend)
+plotHeat(summedRaster_JuncK, IDListJunc)
+plotHeat(summedRaster_SnodK, IDListSnod)
+plotHeat(summedRaster_SnodK, IDListEspa)
+
+summedRaster_GalaKM <- maskOutline(summedRaster_GalaK[[1]], outline_IMG_2600, refShape = 'target', flipOutline = 'y')
+summedRaster_HendKM <- maskOutline(summedRaster_HendK[[1]], outline_IMG_2600, refShape = 'target', flipOutline = 'y')
+summedRaster_JuncKM <- maskOutline(summedRaster_JuncK[[1]], outline_IMG_2600, refShape = 'target', flipOutline = 'y')
+summedRaster_SnodKM <- maskOutline(summedRaster_SnodK[[3]], outline_IMG_2600, refShape = 'target', flipOutline = 'y')
+
+plotHeat(summedRaster_GalaKM, IDListGal)
+plotHeat(summedRaster_HendKM, IDListHend)
+plotHeat(summedRaster_JuncKM, IDListJunc)
+plotHeat(summedRaster_SnodKM, IDListSnod)
