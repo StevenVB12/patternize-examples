@@ -258,7 +258,7 @@ colList <- c("gold", "red")
 
 TotalList <- c(rasterList_regRGBEra, rasterList_regRGBHyb)
 
-pcaOut <- patPCA(TotalList, popList, colList, plot = 'points', plotChanges = TRUE, PCx = 1, PCy = 2, 
+pcaOut <- patPCA(TotalList, popList, colList, plot = TRUE, plotType = 'points', plotChanges = TRUE, PCx = 1, PCy = 2, 
                  plotCartoon = TRUE, refShape = 'target', outline = outline_BC0057, crop = c(1000,3800,500,2800), 
                  flipRaster = 'xy', imageList = imageListEra, cartoonID = 'BC0057', normalized = TRUE, 
                  cartoonFill = 'black', cartoonOrder = 'under', legendTitle = 'Predicted')
@@ -366,7 +366,7 @@ TotalList <- c(rasterList_regKWT_S, rasterList_regKG_S)
 
 # Run and plot PCA
 colfunc <- c("blue","lightblue","gray","pink","red")
-pcaOut <- patPCA(TotalList, popList, colList, plot = 'points', plotChanges = TRUE, PCx = 1, PCy = 2, 
+pcaOut <- patPCA(TotalList, popList, colList, plot = TRUE, plotType = 'points', plotChanges = TRUE, PCx = 1, PCy = 2, 
                  plotCartoon = TRUE, refShape = 'target', outline = outline_9472, colpalette = colfunc, 
                  crop = c(300,2800,300,1800),flipRaster = 'y', imageList = imageListWT, cartoonID = 'cross20_F1fBC1_wtm_9472', 
                  normalized = TRUE, cartoonFill = 'gray', cartoonOrder = 'under', legendTitle = 'Predicted')
@@ -486,7 +486,7 @@ for(e in 1:length(rasterList_regGalaK_S)){
 TotalList <- c(rasterList_regGalaK_SM, rasterList_regHendK_SM, rasterList_regJuncK_SM, rasterList_regSnodK_SM)#, rasterList_regEspaK_SM)
 
 # Run and plot PCA
-pcaOut <- patPCA(TotalList, popList, colList, plot = 'points', plotChanges = TRUE, PCx = 1, PCy = 2, 
+pcaOut <- patPCA(TotalList, popList, colList, plot = TRUE, plotType = 'points', plotChanges = TRUE, PCx = 1, PCy = 2, 
                  plotCartoon = TRUE, refShape = 'target', outline = outline_IMG_2600, 
                  flipOutline = 'y', imageList = imageListGala, cartoonID = 'IMG_2600', 
                  normalized = TRUE, cartoonFill = 'black', cartoonOrder = 'under', legendTitle = 'Predicted')
