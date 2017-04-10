@@ -68,7 +68,7 @@ imageList <- makeList(IDlist, 'image', prepath, extension)
 # run alignment of color patterns
 RGB <- c(114,17,0) # red
 rasterList_lanRGB <- patLanRGB(imageList, landmarkList, RGB, transformRef = 'BC0004', resampleFactor = 3, 
-                               colOffset = 0.15, crop = TRUE, res = 200, adjustCoords = TRUE, plot = TRUE)
+                               colOffset = 0.15, crop = TRUE, res = 200, adjustCoords = TRUE, plot = 'stack')
 
 # sum the colorpatterns
 summedRaster_lanRGB <- sumRaster(rasterList_lanRGB, IDlist, type = 'RGB')
@@ -111,7 +111,7 @@ target <- imageList[['BC0004']]
 # run alignment of color patterns
 RGB <- c(114,17,0) # red
 rasterList_regRGB <- patRegRGB(imageList, target, RGB, resampleFactor = 5, colOffset= 0.15, 
-                               removebg = 100, plot = TRUE)
+                               removebg = 100, plot = 'stack')
 
 # sum the colorpatterns
 summedRaster_regRGB <- sumRaster(rasterList_regRGB, IDlist, type = 'RGB')
@@ -182,12 +182,12 @@ target <- imageListEra[['BC0057']]
 
 RGB <- c(143,138,49) # yellow
 rasterList_regRGBEra <- patRegRGB(imageListEra, target, RGB, resampleFactor = 5, colOffset= 0.12, 
-                                  crop = c(1000,3800,500,2800), removebgR = 100, plot = TRUE, focal = TRUE, 
+                                  crop = c(1000,3800,500,2800), removebgR = 100, plot = 'stack', focal = TRUE, 
                                   sigma = 5, iterations = 3)
 
 RGB <- c(114,17,0) # red
 rasterList_regRGBHyb <- patRegRGB(imageListHyb, target, RGB, resampleFactor = 5, colOffset= 0.12, 
-                                  crop = c(1000,3800,500,2800), removebgR = 100, plot = TRUE, focal = TRUE, 
+                                  crop = c(1000,3800,500,2800), removebgR = 100, plot = 'stack', focal = TRUE, 
                                   sigma = 5, iterations = 3)
 
 # sum the colorpatterns
