@@ -214,9 +214,9 @@ subtracted <- summedRaster_regRGBHyb/length(IDListHyb) - summedRaster_regRGBEra/
 
 # plot subtracted heatmap
 colfunc <- c("blue","lightblue","black","pink","red")
-plotHeat(subtracted, IDlist, plotCartoon = TRUE, refShape = 'target', outline = outline_BC0057, 
+plotHeat(subtracted, IDListEra, plotCartoon = TRUE, refShape = 'target', outline = outline_BC0057, 
          lines = lines_BC0057, landList = landmarkList, adjustCoords = TRUE, crop = c(1000,3800,500,2800), 
-         flipRaster = 'xy', imageList = imageList, cartoonID = 'BC0057', zlim=c(-1,1), colpalette= colfunc, 
+         flipRaster = 'xy', imageList = imageListEra, cartoonID = 'BC0057', zlim=c(-1,1), colpalette= colfunc, 
          normalized = TRUE, cartoonFill = 'black', cartoonOrder = 'under', legendTitle = 'Difference')
 
 ###
@@ -225,11 +225,11 @@ plotHeat(subtracted, IDlist, plotCartoon = TRUE, refShape = 'target', outline = 
 
 AreaEra <- patArea(rasterList_regRGBEra, IDListEra, refShape = 'target', type = 'RGB', 
                    outline = outline_BC0057, crop = c(1000,3800,500,2800), adjustCoords = TRUE, 
-                   imageList = imageList, cartoonID = 'BC0057', flipRaster = 'xy')
+                   imageList = imageListEra, cartoonID = 'BC0057', flipRaster = 'xy')
 
 AreaHyb <- patArea(rasterList_regRGBHyb, IDListHyb, refShape = 'target', type = 'RGB', 
                    outline = outline_BC0057, crop = c(1000,3800,500,2800), adjustCoords = TRUE, 
-                   imageList = imageList, cartoonID = 'BC0057', flipRaster = 'xy')
+                   imageList = imageListHyb, cartoonID = 'BC0057', flipRaster = 'xy')
 
 hist(AreaEra$Area)
 hist(AreaHyb$Area)
