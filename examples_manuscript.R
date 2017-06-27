@@ -26,14 +26,23 @@ Note that when running k-means clustering of colors, the rasterlayers containing
 cluster has to be set manually each time and this may changes compared to the layers defined 
 in the current example.
 "
-
+###
 # load patternize library
+###
 library(patternize)
 
+###
 # make sure these dependencies are installed:
+###
 #install.packages("rgdal","abind","raster","sp","RniftyReg")
 #library(devtools)
 #install_github("zarquon42b/Morpho", local=FALSE)
+
+###
+# The viridis package provides colour blind friendly colour schemes
+###
+# install.packages("viridis")
+library(viridis)
 
 ###############################################
 # Analysis for Figure 1 - Comparison landmark and registration alignement
@@ -56,7 +65,7 @@ IDlist <- c('BC0004',
             'BC0366')
 
 # make list with landmarks
-prepath <- 'landmarks'
+prepath <- 'landmarks/Heliconius'
 extension <- '_landmarks_LFW.txt'
 landmarkList <- makeList(IDlist, 'landmark', prepath, extension)
 
@@ -70,6 +79,10 @@ RGB <- c(114,17,0) # red
 rasterList_lanRGB <- patLanRGB(imageList, landmarkList, RGB, transformRef = 'BC0004', resampleFactor = 3, 
                                colOffset = 0.15, crop = TRUE, res = 200, adjustCoords = TRUE, plot = 'stack')
 
+# If you don't want to run the function, you can load the saved output rasterList
+# save(rasterList_lanRGB, file = 'output/Fig1_rasterList_lanRGB.rda')
+load('output/Fig1_rasterList_lanRGB.rda')
+
 # sum the colorpatterns
 summedRaster_lanRGB <- sumRaster(rasterList_lanRGB, IDlist, type = 'RGB')
 
@@ -77,7 +90,8 @@ summedRaster_lanRGB <- sumRaster(rasterList_lanRGB, IDlist, type = 'RGB')
 outline_BC0004 <- read.table('cartoon/BC0004_outline.txt', h= F)
 lines_BC0004 <- list.files(path='cartoon', pattern='BC0004_vein', full.names = T)
 
-colfunc <- c("black","lightblue","blue","green", "yellow","red")
+# colfunc <- c("black","lightblue","blue","green", "yellow","red")
+colfunc <- inferno(100)
 plotHeat(summedRaster_lanRGB, IDlist, plotCartoon = TRUE, refShape = 'target', outline = outline_BC0004, 
          lines = lines_BC0004, landList = landmarkList, adjustCoords = TRUE, flipRaster = 'y', 
          imageList = imageList, cartoonID = 'BC0004', cartoonFill = 'black', cartoonOrder = 'under', 
@@ -113,6 +127,10 @@ RGB <- c(114,17,0) # red
 rasterList_regRGB <- patRegRGB(imageList, target, RGB, resampleFactor = 5, colOffset= 0.15, 
                                removebg = 100, plot = 'stack')
 
+# If you don't want to run the function, you can load the saved output rasterList
+# save(rasterList_regRGB, file = 'output/Fig1_rasterList_regRGB.rda')
+load('output/Fig1_rasterList_regRGB.rda')
+
 # sum the colorpatterns
 summedRaster_regRGB <- sumRaster(rasterList_regRGB, IDlist, type = 'RGB')
 
@@ -120,10 +138,11 @@ summedRaster_regRGB <- sumRaster(rasterList_regRGB, IDlist, type = 'RGB')
 outline_BC0004 <- read.table('cartoon/BC0004_outline.txt', h= F)
 lines_BC0004 <- list.files(path='cartoon', pattern='BC0004_vein', full.names = T)
 
-colfunc <- c("black","lightblue","blue","green", "yellow","red")
+# colfunc <- c("black","lightblue","blue","green", "yellow","red")
+colfunc <- inferno(100)
 plotHeat(summedRaster_regRGB, IDlist, plotCartoon = TRUE, refShape = 'target', outline = outline_BC0004, 
-         lines = lines_BC0004, landList = landmarkList, flipRaster = 'xy', imageList = imageList, 
-         cartoonID = 'BC0004', cartoonFill = 'black', cartoonOrder = 'under', colpalette = colfunc)
+         lines = lines_BC0004, flipRaster = 'xy', imageList = imageList, cartoonID = 'BC0004', 
+         cartoonFill = 'black', cartoonOrder = 'under', colpalette = colfunc)
 
 ##
 # Compare landmark and registration
@@ -190,6 +209,12 @@ rasterList_regRGBHyb <- patRegRGB(imageListHyb, target, RGB, resampleFactor = 5,
                                   crop = c(1000,3800,500,2800), removebgR = 100, plot = 'stack', focal = TRUE, 
                                   sigma = 5, iterations = 3)
 
+# If you don't want to run the function, you can load the saved output rasterList
+# save(rasterList_regRGBEra, file = 'output/Fig2_rasterList_regRGBEra.rda')
+load('output/Fig2_rasterList_regRGBEra.rda')
+# save(rasterList_regRGBHyb, file = 'output/Fig2_rasterList_regRGBHyb.rda')
+load('output/Fig2_rasterList_regRGBHyb.rda')
+
 # sum the colorpatterns
 summedRaster_regRGBEra <- sumRaster(rasterList_regRGBEra, IDListEra, type = 'RGB')
 summedRaster_regRGBHyb <- sumRaster(rasterList_regRGBHyb, IDListHyb, type = 'RGB')
@@ -198,7 +223,8 @@ summedRaster_regRGBHyb <- sumRaster(rasterList_regRGBHyb, IDListHyb, type = 'RGB
 outline_BC0057 <- read.table('cartoon/BC0057_outline.txt', h= F)
 lines_BC0057 <- list.files(path='cartoon', pattern='BC0057_vein', full.names = T)
 
-colfunc <- c("black","lightblue","blue","green", "yellow","red")
+# colfunc <- c("black","lightblue","blue","green", "yellow","red")
+colfunc <- inferno(100)
 plotHeat(summedRaster_regRGBEra, IDListEra, plotCartoon = TRUE, refShape = 'target', outline = outline_BC0057, 
          lines = lines_BC0057, landList = landmarkList, crop = c(1000,3800,500,2800), flipRaster = 'xy', 
          imageList = imageListEra, cartoonID = 'BC0057', cartoonFill = 'black', cartoonOrder = 'under', 
@@ -255,12 +281,14 @@ polygon(dHyb, col=rgb(1, 0, 0, 0.5), border="red")
 # Make population and color list
 popList <- list(IDListEra, IDListHyb)
 colList <- c("gold", "red")
+symbolList <- c(16,17)
 
 TotalList <- c(rasterList_regRGBEra, rasterList_regRGBHyb)
 
-pcaOut <- patPCA(TotalList, popList, colList, plot = TRUE, plotType = 'points', plotChanges = TRUE, PCx = 1, PCy = 2, 
-                 plotCartoon = TRUE, refShape = 'target', outline = outline_BC0057, crop = c(1000,3800,500,2800), 
-                 flipRaster = 'xy', imageList = imageListEra, cartoonID = 'BC0057', normalized = TRUE, 
+pcaOut <- patPCA(TotalList, popList, colList, symbolList = symbolList, plot = TRUE, plotType = 'points', 
+                 plotChanges = TRUE, PCx = 1, PCy = 2, plotCartoon = TRUE, refShape = 'target', 
+                 outline = outline_BC0057, crop = c(1000,3800,500,2800), flipRaster = 'xy', 
+                 imageList = imageListEra, cartoonID = 'BC0057', normalized = TRUE, 
                  cartoonFill = 'black', cartoonOrder = 'under', legendTitle = 'Predicted')
 
 
@@ -296,7 +324,7 @@ IDListG <- c('cross20_F1fBC1_whitem_1278',
              'cross20_F1fBC1_whitem_1279')
 
 # make lists with images
-prepath <- 'images/guppies'
+prepath <- 'images/Guppies'
 extension <- '.jpg'
 imageListWT <- makeList(IDListWT, 'image', prepath, extension)
 imageListG <- makeList(IDListG, 'image', prepath, extension)
@@ -314,6 +342,11 @@ rasterList_regKWT <- patRegK(imageListWT, target, k = 7, resampleFactor = 5, cro
 rasterList_regKG <- patRegK(imageListG, target, k = 7, resampleFactor = 5, crop = c(200,2800,300,1800), 
                             plot = TRUE, useBlockPercentage = 90, maskOutline = outline_9472, maskColor = 255)
 
+# If you don't want to run the function, you can load the saved output rasterList
+# save(rasterList_regKWT, file = 'output/Fig3_rasterList_regKWT.rda')
+load('output/Fig3_rasterList_regKWT.rda')
+# save(rasterList_regKG, file = 'output/Fig3_rasterList_regKG.rda')
+load('output/Fig3_rasterList_regKG.rda')
 
 # sum the colorpatterns
 summedRaster_KWT <- sumRaster(rasterList_regKWT, IDListWT, type = 'k')
@@ -329,24 +362,25 @@ plotHeat(summedRaster_KG, IDListWT, plotCartoon = TRUE, refShape = 'target', out
          cartoonOrder = 'under', cartoonFill = 'black')
 
 # plot selected heatmap (note that you will have to pick the correct color cluster manually (number between [[...]]))
-colfunc <- c("gray","lightblue","blue","green", "yellow","red")
-plotHeat(summedRaster_KWT[[3]], IDListWT, plotCartoon = TRUE, refShape = 'target', outline = outline_9472, 
+# colfunc <- c("gray","lightblue","blue","green", "yellow","red")
+colfunc <- inferno(100)
+plotHeat(summedRaster_KWT[[4]], IDListWT, plotCartoon = TRUE, refShape = 'target', outline = outline_9472, 
          crop = c(300,2800,300,1800), flipRaster = 'y', imageList = imageListWT, cartoonOrder = 'under', 
-         cartoonFill = 'gray', colpalette = colfunc)
+         cartoonFill = 'black', colpalette = colfunc)
 
-plotHeat(summedRaster_KG[[4]], IDListWT, plotCartoon = TRUE, refShape = 'target', outline = outline_9472, 
+plotHeat(summedRaster_KG[[2]], IDListWT, plotCartoon = TRUE, refShape = 'target', outline = outline_9472, 
          crop = c(300,2800,300,1800), flipRaster = 'y', imageList = imageListWT, cartoonOrder = 'under',
-         cartoonFill = 'gray', colpalette = colfunc)
+         cartoonFill = 'black', colpalette = colfunc)
 
 # subtract rasters
-subtracted <- summedRaster_KWT[[3]] - summedRaster_KG[[4]]
+subtracted <- summedRaster_KWT[[4]] - summedRaster_KG[[2]]
 
 # plot heatmap
-colfunc <- c("blue","lightblue","gray","pink","red")
+colfunc <- c("blue","lightblue","black","pink","red")
 plotHeat(subtracted, IDListWT, plotCartoon = TRUE, refShape = 'target', outline = outline_9472, 
          crop = c(200,2800,300,1800),landList = landmarkList, adjustCoords = TRUE, imageList = imageListWT, 
          flipRaster = 'y', cartoonID = 'cross20_F1fBC1_wtm_9472', zlim=c(-1,1), colpalette= colfunc, 
-         cartoonFill = 'gray', cartoonOrder = 'under', legendTitle = 'Difference')
+         cartoonFill = 'black', cartoonOrder = 'under', legendTitle = 'Difference')
 
 
 ###
@@ -356,20 +390,21 @@ plotHeat(subtracted, IDListWT, plotCartoon = TRUE, refShape = 'target', outline 
 # Make population and color list
 popList <- list(IDListWT, IDListG)
 colList <- c("black", "gold")
+symbolList <- c(16,17)
 
 # extract rasters for k-means cluster of interest and combine rasters 
 #(note that you will have to pick the correct color cluster manually (number between [[...]]))
-rasterList_regKWT_S <- lapply(rasterList_regKWT, function (x) x[[2]])
-rasterList_regKG_S <- lapply(rasterList_regKG, function (x) x[[3]])
+rasterList_regKWT_S <- lapply(rasterList_regKWT, function (x) x[[4]])
+rasterList_regKG_S <- lapply(rasterList_regKG, function (x) x[[2]])
 
 TotalList <- c(rasterList_regKWT_S, rasterList_regKG_S)
 
 # Run and plot PCA
-colfunc <- c("blue","lightblue","gray","pink","red")
-pcaOut <- patPCA(TotalList, popList, colList, plot = TRUE, plotType = 'points', plotChanges = TRUE, PCx = 1, PCy = 2, 
+colfunc <- c("blue","lightblue","black","pink","red")
+pcaOut <- patPCA(TotalList, popList, colList, symbolList = symbolList, plot = TRUE, plotType = 'points', plotChanges = TRUE, PCx = 1, PCy = 2, 
                  plotCartoon = TRUE, refShape = 'target', outline = outline_9472, colpalette = colfunc, 
                  crop = c(300,2800,300,1800),flipRaster = 'y', imageList = imageListWT, cartoonID = 'cross20_F1fBC1_wtm_9472', 
-                 normalized = TRUE, cartoonFill = 'gray', cartoonOrder = 'under', legendTitle = 'Predicted')
+                 normalized = TRUE, cartoonFill = 'black', cartoonOrder = 'under', legendTitle = 'Predicted')
 
 
 
@@ -407,60 +442,90 @@ imageListSnod <- makeList(IDListSnod, 'image', prepath, extension)
 # choose target image
 target <- imageListGala[['IMG_2600']]
 
-# run alignment of color patterns
-
-outline_IMG_2600 <- read.table('cartoon/IMG_2600_outline.txt', h= F)
-
-# color extraction using k-means
+# run alignment of color patterns using k-means
 rasterList_regGalaK <- patRegK(imageListGala, target, k = 3, resampleFactor = 10, plot = T, removebgR = 130, removebgK = 150)
 rasterList_regHendK <- patRegK(imageListHend, target, k = 3, resampleFactor = 10, plot = T, removebgR = 130, removebgK = 180)
 rasterList_regJuncK <- patRegK(imageListJunc, target, k = 3, resampleFactor = 10, plot = T, removebgR = 130, removebgK = 130)
 rasterList_regSnodK <- patRegK(imageListSnod, target, k = 3, resampleFactor = 10, plot = T, removebgR = 130, removebgK = 200)
 
+# If you don't want to run the function, you can load the saved output rasterList
+# save(rasterList_regGalaK, file = 'output/Fig4_rasterList_regGalaK.rda')
+load('output/Fig4_rasterList_regGalaK.rda')
+# save(rasterList_regHendK, file = 'output/Fig4_rasterList_regHendK.rda')
+load('output/Fig4_rasterList_regHendK.rda')
+# save(rasterList_regJuncK, file = 'output/Fig4_rasterList_regJuncK.rda')
+load('output/Fig4_rasterList_regJuncK.rda')
+# save(rasterList_regSnodK, file = 'output/Fig4_rasterList_regSnodK.rda')
+load('output/Fig4_rasterList_regSnodK.rda')
+
+# sum rasters
 summedRaster_GalaK <- sumRaster(rasterList_regGalaK, IDListGala, type = 'k')
 summedRaster_HendK <- sumRaster(rasterList_regHendK, IDListHend, type = 'k')
 summedRaster_JuncK <- sumRaster(rasterList_regJuncK, IDListJunc, type = 'k')
 summedRaster_SnodK <- sumRaster(rasterList_regSnodK, IDListSnod, type = 'k')
 
-plotHeat(summedRaster_GalaK, IDListGala)
-plotHeat(summedRaster_HendK, IDListHend)
-plotHeat(summedRaster_JuncK, IDListJunc)
-plotHeat(summedRaster_SnodK, IDListSnod)
+# plot all k
+colfunc <- inferno(100)
+plotHeat(summedRaster_GalaK, IDListGala, colpalette = colfunc)
+plotHeat(summedRaster_HendK, IDListHend, colpalette = colfunc)
+plotHeat(summedRaster_JuncK, IDListJunc, colpalette = colfunc)
+plotHeat(summedRaster_SnodK, IDListSnod, colpalette = colfunc)
 
-plotHeat(summedRaster_GalaK[[1]], IDListGala)
-plotHeat(summedRaster_HendK[[3]], IDListHend)
-plotHeat(summedRaster_JuncK[[3]], IDListJunc)
-plotHeat(summedRaster_SnodK[[1]], IDListSnod)
+# plot selected k
+plotHeat(summedRaster_GalaK[[1]], IDListGala, colpalette = colfunc)
+plotHeat(summedRaster_HendK[[2]], IDListHend, colpalette = colfunc)
+plotHeat(summedRaster_JuncK[[2]], IDListJunc, colpalette = colfunc)
+plotHeat(summedRaster_SnodK[[1]], IDListSnod, colpalette = colfunc)
 
-summedRaster_GalaKM <- maskOutline(summedRaster_GalaK[[2]], outline_IMG_2600, refShape = 'target', flipOutline = 'y', imageList = imageListGala)
-summedRaster_HendKM <- maskOutline(summedRaster_HendK[[1]], outline_IMG_2600, refShape = 'target', flipOutline = 'y', imageList = imageListHend)
+# mask outline
+outline_IMG_2600 <- read.table('cartoon/IMG_2600_outline.txt', h= F)
+
+summedRaster_GalaKM <- maskOutline(summedRaster_GalaK[[1]], outline_IMG_2600, refShape = 'target', flipOutline = 'y', imageList = imageListGala)
+summedRaster_HendKM <- maskOutline(summedRaster_HendK[[2]], outline_IMG_2600, refShape = 'target', flipOutline = 'y', imageList = imageListHend)
 summedRaster_JuncKM <- maskOutline(summedRaster_JuncK[[2]], outline_IMG_2600, refShape = 'target', flipOutline = 'y', imageList = imageListJunc)
-summedRaster_SnodKM <- maskOutline(summedRaster_SnodK[[2]], outline_IMG_2600, refShape = 'target', flipOutline = 'y', imageList = imageListSnod)
+summedRaster_SnodKM <- maskOutline(summedRaster_SnodK[[1]], outline_IMG_2600, refShape = 'target', flipOutline = 'y', imageList = imageListSnod)
 
+# plot selected k with masked outline
+colfunc <- inferno(100)
 plotHeat(summedRaster_GalaKM, IDListGala, plotCartoon = TRUE, refShape = 'target', outline = outline_IMG_2600, 
-         flipOutline = 'y', imageList = imageListGala, cartoonOrder = 'under')
+         flipOutline = 'y', imageList = imageListGala, cartoonOrder = 'under', colpalette = colfunc, cartoonFill = 'black')
 plotHeat(summedRaster_HendKM, IDListHend, plotCartoon = TRUE, refShape = 'target', outline = outline_IMG_2600, 
-         flipOutline = 'y', imageList = imageListHend, cartoonOrder = 'under')
+         flipOutline = 'y', imageList = imageListHend, cartoonOrder = 'under', colpalette = colfunc, cartoonFill = 'black')
 plotHeat(summedRaster_JuncKM, IDListJunc, plotCartoon = TRUE, refShape = 'target', outline = outline_IMG_2600, 
-         flipOutline = 'y', imageList = imageListJunc, cartoonOrder = 'under')
+         flipOutline = 'y', imageList = imageListJunc, cartoonOrder = 'under', colpalette = colfunc, cartoonFill = 'black')
 plotHeat(summedRaster_SnodKM, IDListSnod, plotCartoon = TRUE, refShape = 'target', outline = outline_IMG_2600, 
-         flipOutline = 'y', imageList = imageListSnod, cartoonOrder = 'under')
+         flipOutline = 'y', imageList = imageListSnod, cartoonOrder = 'under', colpalette = colfunc, cartoonFill = 'black')
+
+# # code for high quality image
+# rasterList_regHendK_HQ <- patRegK(imageListHend, target, k = 3, resampleFactor = 2, plot = T, removebgR = 130, removebgK = 180)
+# 
+# # save(rasterList_regHendK_HQ, file = 'output/Fig4_rasterList_regHendK_HQ.rda')
+# load('output/Fig4_rasterList_regHendK_HQ.rda')
+# 
+# summedRaster_HendK_HQ <- sumRaster(rasterList_regHendK_HQ, IDListHend, type = 'k')
+# plotHeat(summedRaster_HendK_HQ[[1]], IDListHend, colpalette = colfunc)
+
+# # some funky 3D plot if you like
+# install.packages("rasterVis")
+# library(rasterVis)
+# plot3D(summedRaster_HendK_HQ[[1]], col = colorRampPalette(c("white","lightblue","blue","green", "yellow","red")))
 
 ###
 # Plot PCA
 ###
 
 # Make population and color list
-popList <- list(IDListGala, IDListHend, IDListJunc, IDListSnod)#, IDListEspa)
-colList <- c("green", "red", "darkgreen","orange")#,"yellow")
+popList <- list(IDListGala, IDListHend, IDListJunc, IDListSnod)
+colList <- c("green", "red", "darkgreen","orange")
+symbolList <- c(15,16,17,18)
 
 # extract rasters for k-means cluster of interest and combine rasters
-rasterList_regGalaK_S <- lapply(rasterList_regGalaK, function (x) x[[2]])
-rasterList_regHendK_S <- lapply(rasterList_regHendK, function (x) x[[1]])
+rasterList_regGalaK_S <- lapply(rasterList_regGalaK, function (x) x[[1]])
+rasterList_regHendK_S <- lapply(rasterList_regHendK, function (x) x[[2]])
 rasterList_regJuncK_S <- lapply(rasterList_regJuncK, function (x) x[[2]])
-rasterList_regSnodK_S <- lapply(rasterList_regSnodK, function (x) x[[2]])
+rasterList_regSnodK_S <- lapply(rasterList_regSnodK, function (x) x[[1]])
 
-# mask the selected raters with outline
+# mask the selected rasters with outline
 rasterList_regGalaK_SM <-list()
 for(e in 1:length(rasterList_regGalaK_S)){
   rasterList_regGalaK_SM[[e]] <- maskOutline(rasterList_regGalaK_S[[e]], outline_IMG_2600, refShape = 'target', 
@@ -486,10 +551,54 @@ for(e in 1:length(rasterList_regGalaK_S)){
 TotalList <- c(rasterList_regGalaK_SM, rasterList_regHendK_SM, rasterList_regJuncK_SM, rasterList_regSnodK_SM)#, rasterList_regEspaK_SM)
 
 # Run and plot PCA
-pcaOut <- patPCA(TotalList, popList, colList, plot = TRUE, plotType = 'points', plotChanges = TRUE, PCx = 1, PCy = 2, 
-                 plotCartoon = TRUE, refShape = 'target', outline = outline_IMG_2600, 
-                 flipOutline = 'y', imageList = imageListGala, cartoonID = 'IMG_2600', 
-                 normalized = TRUE, cartoonFill = 'black', cartoonOrder = 'under', legendTitle = 'Predicted')
+pcaOut <- patPCA(TotalList, popList, colList, symbolList = symbolList, plot = TRUE, plotType = 'points', plotChanges = TRUE, 
+                 PCx = 1, PCy = 2, plotCartoon = TRUE, refShape = 'target', outline = outline_IMG_2600, flipOutline = 'y', 
+                 imageList = imageListGala, cartoonID = 'IMG_2600', normalized = TRUE, cartoonFill = 'black', 
+                 cartoonOrder = 'under', legendTitle = 'Predicted')
 
 
+###############################################
+# Analysis for Figure 5 - Salamanders
+###############################################
+
+###
+# patternize landmarks/watershed analysis
+###
+
+# Lists with samples
+IDListSal <- c('4031','3864','3875','3959','4118','4706','4758','5574','5580','5596')
+
+# make list with landmarks
+prepath <- 'landmarks/Salamanders'
+extension <- '_landmarks.txt'
+landmarkListSal <- makeList(IDListSal, 'landmark', prepath, extension)
+
+# make lists with images
+prepath <- 'images/Salamanders'
+extension <- '.JPG'
+imageListSal <- makeList(IDListSal, 'image', prepath, extension)
+
+# make square reference to transform images to
+REF = matrix(c(0,0,100,0,100,100,0,100), nrow=4, ncol=2, byrow = TRUE)
+
+# extract the patterns using watershed
+rasterList_SalW <- patLanW(imageListSal, landmarkListSal, transformRef = REF, resampleFactor = 5, plotTransformed = TRUE, 
+                        correct = TRUE, plotCorrect = FALSE, blur = FALSE, sigma = 2, bucketfill = FALSE, cleanP = 3, adjustCoords = TRUE,
+                        splitC = 10, plotPriority = TRUE, plotWS = TRUE, plotBF = TRUE, plotFinal = TRUE, maskOutline = REF)
+
+# save(rasterList_SalW, file = 'output/Fig4_rasterList_SalW.rda')
+load('output/Fig4_rasterList_SalW.rda')
+
+# sum the colorpatterns
+summedRaster_SalW <- sumRaster(rasterList_SalW, IDListSal, type = 'RGB')
+
+# plot heatmap
+outline_4031 <- read.table('cartoon/4031_outline.txt', h= F)
+
+colfunc <- inferno(100)
+plotHeat(summedRaster_SalW, IDListSal, plotCartoon = TRUE, refShape = REF, outline = outline_4031, landList = landmarkListSal, 
+         adjustCoords = TRUE, flipOutline = 'y', imageList = imageListSal, cartoonID = '4031', cartoonFill = 'black', 
+         cartoonOrder = 'under', colpalette = colfunc)
+
+rect(0,0,100,100, border= 'red')
 
