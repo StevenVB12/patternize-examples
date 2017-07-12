@@ -5,6 +5,7 @@ Figure 1: Comparison landmark and registration alignement
 Figure 2: Heliconius erato erato and hybrids
 Figure 3: Guppies 
 Figure 4: Wolf spiders
+Figure 5: Salamanders
 
 
 Guppie images were obtained from:
@@ -16,6 +17,10 @@ Wolfspider images were obtained from:
 De Busschere, C., Baert, L., Van Belleghem, S.M., Dekoninck, W. & Hendrickx, F. (2012). 
 Parallel phenotypic evolution in a wolf spider radiation on Gal?pagos. 
 
+Salamander images were obtained from:
+Balogová M & Uhrin M (2015) Sex-biased dorsal spotted patterns in the fire salamander 
+(Salamandra salamandra) Salamandra 51(1): 12-18.
+
 Landmarks and outlines for the analysis and plots were obtained in Fiji: 
 Schindelin, J., Arganda-carreras, I., Frise, E., Kaynig, V., Longair, M., Pietzsch, T., 
 Preibisch, S., Rueden, C., Saalfeld, S., Schmid, B., Tinevez, J., White, D.J., Hartenstein, V.
@@ -23,7 +28,7 @@ Preibisch, S., Rueden, C., Saalfeld, S., Schmid, B., Tinevez, J., White, D.J., H
 biological-image analysis. Nature Methods, 9, 676-682.
 
 Note that when running k-means clustering of colors, the rasterlayers containing the correct
-cluster has to be set manually each time and this may changes compared to the layers defined 
+cluster has to be set manually each time and this may be different compared to the layers defined 
 in the current example.
 "
 ###
