@@ -23,8 +23,8 @@ Balogová M & Uhrin M (2015) Sex-biased dorsal spotted patterns in the fire sala
 
 Landmarks and outlines for the analysis and plots were obtained in Fiji: 
 Schindelin, J., Arganda-carreras, I., Frise, E., Kaynig, V., Longair, M., Pietzsch, T., 
-Preibisch, S., Rueden, C., Saalfeld, S., Schmid, B., Tinevez, J., White, D.J., Hartenstein, V.
-, Eliceiri, K., Tomancak, P. & Cardona, A. (2012). Fiji: an open-source platform for 
+Preibisch, S., Rueden, C., Saalfeld, S., Schmid, B., Tinevez, J., White, D.J., Hartenstein, V., 
+Eliceiri, K., Tomancak, P. & Cardona, A. (2012). Fiji: an open-source platform for 
 biological-image analysis. Nature Methods, 9, 676-682.
 
 Note that when running k-means clustering of colors, the rasterlayers containing the correct
