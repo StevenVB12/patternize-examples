@@ -231,14 +231,14 @@ lines_BC0057 <- list.files(path='cartoon', pattern='BC0057_vein', full.names = T
 # colfunc <- c("black","lightblue","blue","green", "yellow","red")
 colfunc <- inferno(100)
 plotHeat(summedRaster_regRGBEra, IDListEra, plotCartoon = TRUE, refShape = 'target', outline = outline_BC0057, 
-         lines = lines_BC0057, landList = landmarkList, crop = c(1000,3800,500,2800), flipRaster = 'xy', 
+         lines = lines_BC0057, flipRaster = 'xy', 
          imageList = imageListEra, cartoonID = 'BC0057', cartoonFill = 'black', cartoonOrder = 'under', 
-         colpalette = colfunc)
+         colpalette = colfunc, refImage = target)
 
 plotHeat(summedRaster_regRGBHyb, IDListHyb, plotCartoon = TRUE, refShape = 'target', outline = outline_BC0057, 
-         lines = lines_BC0057, landList = landmarkList, crop = c(1000,3800,500,2800), flipRaster = 'xy', 
+         lines = lines_BC0057, flipRaster = 'xy',
          imageList = imageListHyb, cartoonID = 'BC0057', cartoonFill = 'black', cartoonOrder = 'under', 
-         colpalette = colfunc)
+         colpalette = colfunc, refImage = target)
 
 # subtract rasters
 subtracted <- summedRaster_regRGBHyb/length(IDListHyb) - summedRaster_regRGBEra/length(IDListEra)
