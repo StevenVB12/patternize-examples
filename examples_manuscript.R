@@ -23,8 +23,8 @@ Balogová M & Uhrin M (2015) Sex-biased dorsal spotted patterns in the fire sala
 
 Landmarks and outlines for the analysis and plots were obtained in Fiji: 
 Schindelin, J., Arganda-carreras, I., Frise, E., Kaynig, V., Longair, M., Pietzsch, T., 
-Preibisch, S., Rueden, C., Saalfeld, S., Schmid, B., Tinevez, J., White, D.J., Hartenstein, V., 
-Eliceiri, K., Tomancak, P. & Cardona, A. (2012). Fiji: an open-source platform for 
+Preibisch, S., Rueden, C., Saalfeld, S., Schmid, B., Tinevez, J., White, D.J., Hartenstein, V.
+, Eliceiri, K., Tomancak, P. & Cardona, A. (2012). Fiji: an open-source platform for 
 biological-image analysis. Nature Methods, 9, 676-682.
 
 Note that when running k-means clustering of colors, the rasterlayers containing the correct
@@ -79,9 +79,12 @@ prepath <- 'images/Heliconius'
 extension <- '-D.jpg'
 imageList <- makeList(IDlist, 'image', prepath, extension)
 
+# tranformref
+target <- landmarkList[['BC0004']]
+
 # run alignment of color patterns
 RGB <- c(114,17,0) # red
-rasterList_lanRGB <- patLanRGB(imageList, landmarkList, RGB, transformRef = 'BC0004', resampleFactor = 3, 
+rasterList_lanRGB <- patLanRGB(imageList, landmarkList, RGB, transformRef = target, resampleFactor = 3, 
                                colOffset = 0.15, crop = TRUE, res = 200, adjustCoords = TRUE, plot = 'stack')
 
 # If you don't want to run the function, you can load the saved output rasterList
@@ -98,7 +101,7 @@ lines_BC0004 <- list.files(path='cartoon', pattern='BC0004_vein', full.names = T
 # colfunc <- c("black","lightblue","blue","green", "yellow","red")
 colfunc <- inferno(100)
 plotHeat(summedRaster_lanRGB, IDlist, plotCartoon = TRUE, refShape = 'target', outline = outline_BC0004, 
-         lines = lines_BC0004, landList = landmarkList, adjustCoords = TRUE, flipRaster = 'y', 
+         lines = lines_BC0004, landList = landmarkList, adjustCoords = TRUE,
          imageList = imageList, cartoonID = 'BC0004', cartoonFill = 'black', cartoonOrder = 'under', 
          colpalette = colfunc)
 
@@ -240,15 +243,17 @@ plotHeat(summedRaster_regRGBHyb, IDListHyb, plotCartoon = TRUE, refShape = 'targ
          imageList = imageListHyb, cartoonID = 'BC0057', cartoonFill = 'black', cartoonOrder = 'under', 
          colpalette = colfunc, refImage = target)
 
+
 # subtract rasters
 subtracted <- summedRaster_regRGBHyb/length(IDListHyb) - summedRaster_regRGBEra/length(IDListEra)
 
 # plot subtracted heatmap
 colfunc <- c("blue","lightblue","black","pink","red")
 plotHeat(subtracted, IDListEra, plotCartoon = TRUE, refShape = 'target', outline = outline_BC0057, 
-         lines = lines_BC0057, landList = landmarkList, adjustCoords = TRUE, crop = c(1000,3800,500,2800), 
-         flipRaster = 'xy', imageList = imageListEra, cartoonID = 'BC0057', zlim=c(-1,1), colpalette= colfunc, 
-         normalized = TRUE, cartoonFill = 'black', cartoonOrder = 'under', legendTitle = 'Difference')
+         lines = lines_BC0057, landList = landmarkList, adjustCoords = TRUE, 
+         flipRaster = 'xy', imageList = imageListEra, cartoonID = 'BC0057', zlim=c(-1,1), colpalette = colfunc, 
+         normalized = TRUE, cartoonFill = 'black', cartoonOrder = 'under', legendTitle = 'Difference', 
+         refImage = target)
 
 ###
 # Calculate colored areas
@@ -291,6 +296,16 @@ symbolList <- c(16,17)
 TotalList <- c(rasterList_regRGBEra, rasterList_regRGBHyb)
 
 pcaOut <- patPCA(TotalList, popList, colList, symbolList = symbolList, plot = TRUE, plotType = 'points', 
+                 plotChanges = TRUE, PCx = 1, PCy = 2, plotCartoon = TRUE, refShape = 'target', 
+                 outline = outline_BC0057, crop = c(1000,3800,500,2800), flipRaster = 'xy', 
+                 imageList = imageListEra, cartoonID = 'BC0057', normalized = TRUE, 
+                 cartoonFill = 'black', cartoonOrder = 'under', legendTitle = 'Predicted')
+
+###
+# Plot RDA
+###
+
+pcaOut <- patRDA(TotalList, popList, colList, symbolList = symbolList, plot = TRUE, plotType = 'points', 
                  plotChanges = TRUE, PCx = 1, PCy = 2, plotCartoon = TRUE, refShape = 'target', 
                  outline = outline_BC0057, crop = c(1000,3800,500,2800), flipRaster = 'xy', 
                  imageList = imageListEra, cartoonID = 'BC0057', normalized = TRUE, 
